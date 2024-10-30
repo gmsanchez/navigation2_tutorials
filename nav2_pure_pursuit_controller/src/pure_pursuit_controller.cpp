@@ -10,7 +10,7 @@
 #include <string>
 #include <memory>
 
-#include "nav2_core/exceptions.hpp"
+#include "nav2_core/controller_exceptions.hpp"
 #include "nav2_util/node_utils.hpp"
 #include "nav2_pure_pursuit_controller/pure_pursuit_controller.hpp"
 #include "nav2_util/geometry_utils.hpp"
@@ -180,7 +180,7 @@ PurePursuitController::transformGlobalPlan(
   // Original mplementation taken fron nav2_dwb_controller
 
   if (global_plan_.poses.empty()) {
-    throw nav2_core::PlannerException("Received plan with zero length");
+    throw nav2_core::ControllerException("Received plan with zero length");
   }
 
   // let's get the pose of the robot in the frame of the plan
@@ -189,7 +189,7 @@ PurePursuitController::transformGlobalPlan(
       tf_, global_plan_.header.frame_id, pose,
       robot_pose, transform_tolerance_))
   {
-    throw nav2_core::PlannerException("Unable to transform robot pose into global plan's frame");
+    throw nav2_core::ControllerException("Unable to transform robot pose into global plan's frame");
   }
 
   // We'll discard points on the plan that are outside the local costmap
@@ -241,7 +241,7 @@ PurePursuitController::transformGlobalPlan(
   global_pub_->publish(transformed_plan);
 
   if (transformed_plan.poses.empty()) {
-    throw nav2_core::PlannerException("Resulting plan has 0 poses in it.");
+    throw nav2_core::ControllerException("Resulting plan has 0 poses in it.");
   }
 
   return transformed_plan;
